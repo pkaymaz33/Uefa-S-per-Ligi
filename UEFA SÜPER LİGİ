@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sanal Oyun Ligi</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+      color: white;
+      padding: 20px;
+    }
+    h1, h2 {
+      text-align: center;
+    }
+    .section {
+      background: rgba(255,255,255,0.05);
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+    }
+    input, select, button {
+      padding: 10px;
+      margin: 5px 0;
+      width: 100%;
+      border: none;
+      border-radius: 5px;
+    }
+    table {
+      width: 100%;
+      margin-top: 10px;
+      border-collapse: collapse;
+    }
+    td, th {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: center;
+    }
+    .dark {
+      background-color: #121212;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>⚽ Sanal Oyun Ligi Paneli</h1>
+
+  <div class="section">
+    <h2>Lig Ayarları</h2>
+    <label>Ligin Adı:</label>
+    <input id="lig_adi" placeholder="Örn: Süper Lig"/>
+    <label>Açıklama:</label>
+    <input id="lig_aciklama" placeholder="Kısa açıklama yaz"/>
+    <label>Arka Plan Rengi:</label>
+    <input type="color" onchange="document.body.style.background = this.value" />
+  </div>
+
+  <div class="section">
+    <h2>Takım Ekle</h2>
+    <input id="takim_adi" placeholder="Takım adı"/>
+    <button onclick="takimEkle()">Takım Ekle</button>
+    <ul id="takim_listesi"></ul>
+  </div>
+
+  <div class="section">
+    <h2>Fikstür (Örnek)</h2>
+    <button onclick="fiksturOlustur()">Fikstür Oluştur</button>
+    <ul id="fikstur_listesi"></ul>
+  </div>
+
+  <div class="section">
+    <h2>Puan Durumu</h2>
+    <table id="puan_tablosu">
+      <tr><th>Takım</th><th>O</th><th>G</th><th>B</th><th>M</th><th>P</th></tr>
+    </table>
+  </div>
+
+  <div class="section">
+    <h2>İstatistikler</h2>
+    <label>Gol Kralı:</label>
+    <input placeholder="Oyuncu Adı"/>
+    <label>Asist Kralı:</label>
+    <input placeholder="Oyuncu Adı"/>
+    <label>CS Kralı:</label>
+    <input placeholder="Oyuncu Adı"/>
+  </div>
+
+  <div class="section">
+    <h2>Tema</h2>
+    <button onclick="toggleTema()">Açık/Koyu Tema Değiştir</button>
+  </div>
+
+  <script>
+    const takimlar = [];
+
+    function takimEkle() {
+      const ad = document.getElementById("takim_adi").value;
+      if (ad && !takimlar.includes(ad)) {
+        takimlar.push(ad);
+        const ul = document.getElementById("takim_listesi");
+        const li = document.createElement("li");
+        li.textContent = ad;
+        ul.appendChild(li);
+        guncellePuanTablosu();
+      }
+    }
+
+    function fiksturOlustur() {
+      const ul = document.getElementById("fikstur_listesi");
+      ul.innerHTML = "";
+      for (let i = 0; i < takimlar.length; i++) {
+        for (let j = i + 1; j < takimlar.length; j++) {
+          const li = document.createElement("li");
+          li.textContent = `${takimlar[i]} vs ${takimlar[j]}`;
+          ul.appendChild(li);
+        }
+      }
+    }
+
+    function guncellePuanTablosu() {
+      const tablo = document.getElementById("puan_tablosu");
+      tablo.innerHTML = "<tr><th>Takım</th><th>O</th><th>G</th><th>B</th><th>M</th><th>P</th></tr>";
+      takimlar.forEach(t => {
+        const row = `<tr><td>${t}</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>`;
+        tablo.innerHTML += row;
+      });
+    }
+
+    function toggleTema() {
+      document.body.classList.toggle("dark");
+    }
+  </script>
+
+</body>
+</html>
